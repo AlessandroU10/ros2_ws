@@ -1,0 +1,8 @@
+{
+    "discord.detailsEditing": "Editing {empty}",
+    "discord.detailsIdling": "empty",
+    "discord.lowerDetailsDebugging": "Debugging: {empty}",
+    "discord.removeLowerDetails": true,
+    "discord.removeDetails": true,
+    "discord.suppressNotifications": true
+}
