@@ -21,7 +21,6 @@ class MinimalClientAsync(Node):
       rclpy.spin_until_future_complete(self, self.future)
       return self.future.result()
 
-
 def main():
    rclpy.init()
 
@@ -33,7 +32,6 @@ def main():
 
    minimal_client.destroy_node()
    rclpy.shutdown()
-
 
 if __name__ == '__main__':
    main()

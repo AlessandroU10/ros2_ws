@@ -6,13 +6,10 @@ from turtlesim.srv import SetPen
 class TurtleColorChanger(Node):
 
     def __init__(self):
-        super().__init__('turtle_color_changer')
-        self.subscription = self.create_subscription(
-            Pose,
-            'turtle1/pose',
-            self.pose_callback,
-            10)
-        self.subscription  # prevent unused variable warning
+        super().__init__('service_practice')
+        self.subscription = self.create_subscription(Pose, 'turtle1/pose', self.pose_callback, 10)
+        
+        self.subscription
         self.pen_client = self.create_client(SetPen, 'turtle1/set_pen')
         while not self.pen_client.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('service not available, waiting again...')
@@ -38,6 +35,7 @@ class TurtleColorChanger(Node):
         request.width = 3
         request.off = 0
         self.pen_client.call_async(request)
+        #self.future = self.cli.call_async(self.req)
 
 def main(args=None):
     rclpy.init(args=args)
