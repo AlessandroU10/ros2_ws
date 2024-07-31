@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(cpp_pubsub)
+project(cpp_srvcli)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -8,28 +8,23 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(std_msgs REQUIRED)
-find_package(geometry_msgs REQUIRED)
-find_package(turtlesim REQUIRED)
+find_package(example_interfaces REQUIRED)
+find_package(turtlesim REQUIRED) 
 
-add_executable(talker src/publisher_script.cpp)
-ament_target_dependencies(talker rclcpp std_msgs)
+add_executable(add_two_ints_server src/add_two_ints_server.cpp)
+ament_target_dependencies(add_two_ints_server rclcpp example_interfaces)
 
-add_executable(listener src/listener.cpp)
-ament_target_dependencies(listener rclcpp std_msgs)
+add_executable(add_two_ints_client src/add_two_ints_client.cpp)
+ament_target_dependencies(add_two_ints_client rclcpp example_interfaces)
 
-add_executable(topics_practice src/topics_practice.cpp)
-ament_target_dependencies(topics_practice rclcpp geometry_msgs turtlesim)
+add_executable(service_practice src/service_practice.cpp)  
+ament_target_dependencies(service_practice rclcpp turtlesim)  
 
 install(TARGETS
-  talker
-  listener
-  topics_practice
-  DESTINATION lib/${PROJECT_NAME})
-
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+   add_two_ints_server
+   add_two_ints_client
+   service_practice  
+   DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

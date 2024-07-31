@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(cpp_pubsub)
+project(testing_interfaces_cpp)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -8,28 +8,7 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(std_msgs REQUIRED)
-find_package(geometry_msgs REQUIRED)
-find_package(turtlesim REQUIRED)
-
-add_executable(talker src/publisher_script.cpp)
-ament_target_dependencies(talker rclcpp std_msgs)
-
-add_executable(listener src/listener.cpp)
-ament_target_dependencies(listener rclcpp std_msgs)
-
-add_executable(topics_practice src/topics_practice.cpp)
-ament_target_dependencies(topics_practice rclcpp geometry_msgs turtlesim)
-
-install(TARGETS
-  talker
-  listener
-  topics_practice
-  DESTINATION lib/${PROJECT_NAME})
-
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+find_package(tutorial_interfaces REQUIRED)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -42,5 +21,24 @@ if(BUILD_TESTING)
   set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
+
+add_executable(sphere_publisher src/sphere_publisher.cpp)
+ament_target_dependencies(sphere_publisher rclcpp tutorial_interfaces)
+
+add_executable(sphere_listener src/sphere_listener.cpp)
+ament_target_dependencies(sphere_listener rclcpp tutorial_interfaces)
+
+add_executable(add_service_node src/add_service_node.cpp)
+ament_target_dependencies(add_service_node rclcpp tutorial_interfaces)
+
+add_executable(add_client_node src/add_client_node.cpp)
+ament_target_dependencies(add_client_node rclcpp tutorial_interfaces)
+
+install(TARGETS
+  sphere_publisher
+  sphere_listener
+  add_service_node
+  add_client_node
+DESTINATION lib/${PROJECT_NAME})
 
 ament_package()

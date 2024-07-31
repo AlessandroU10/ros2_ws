@@ -10,15 +10,15 @@ class MotionController(Node):
         
         self.publisher_ = self.create_publisher(Twist, '/turtle1/cmd_vel', 10)
         self.subscription_ = self.create_subscription(Pose, '/turtle1/pose', self.pose_callback, 10)
-        self.timer_ = self.create_timer(1.0, self.timer_callback)
+        self.timer_ = self.create_timer(0.1, self.timer_callback)
         
         self.pose_ = Pose()
-        self.go_straight = False
-        self.linear_velocity = 1.0
+        self.linear_velocity = 0.5
         self.angular_velocity = 1.0
-        self.angle_ = 0.0
         self.init_pos_x = 5.5
         self.init_pos_y = 5.5
+        self.in_bounds = True
+        self.counter = 5 
 
     def pose_callback(self, msg):
         self.pose_.x = msg.x
@@ -28,19 +28,30 @@ class MotionController(Node):
         MAX_BORDER = 8.0
 
         if MIN_BORDER < self.pose_.x < MAX_BORDER and MIN_BORDER < self.pose_.y < MAX_BORDER:
-            self.go_straight = True
+            self.in_bounds = True
         else:
-            self.go_straight = False
+            self.in_bounds = False
 
     def timer_callback(self):
+        if self.counter > 0:
+            self.get_logger().info(f'Counter: {self.counter}')
+            self.counter -= 1
+            return
+        
         twist_msg = Twist()
         
-        if self.go_straight:
+        if self.in_bounds:
+            twist_msg.linear.x = self.linear_velocity
+            twist_msg.angular.z = self.angular_velocity
+            
+            self.linear_velocity += 0.01
+            self.angular_velocity = 1.0 / self.linear_velocity
+            
+            self.get_logger().info('Drawing spiral')
+        else:
             twist_msg.linear.x = self.linear_velocity
             twist_msg.angular.z = 0.0
-        else:
-            twist_msg.linear.x = 0.0
-            twist_msg.angular.z = self.angular_velocity
+            self.get_logger().info('Going straight')
         
         self.publisher_.publish(twist_msg)
 
